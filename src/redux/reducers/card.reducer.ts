@@ -1,46 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface UserState {
+export interface CardState {
 	data: object;
 	error: object | null;
 	loadingGet: boolean;
 }
 
-const initialState: UserState = {
+const initialState: CardState = {
 	error: null,
 	data: {},
 	loadingGet: true,
 };
 
-export const userSlice = createSlice({
-	name: 'user',
+export const cardSlice = createSlice({
+	name: 'card',
 	initialState,
 	reducers: {
-		getUser: (
-			state: UserState,
+		getCards: (
+			state: CardState,
 			{ type, payload }: { type: string; payload: object },
-		): UserState => {
+		): CardState => {
 			console.log(payload);
 			return { ...state, loadingGet: false, error: null, data: payload };
 		},
-		loadingGetUser: (
-			state: UserState,
+		loadingGetCards: (
+			state: CardState,
 			{ type, payload }: { type: string; payload: object },
-		): UserState => {
+		): CardState => {
 			return { ...state, loadingGet: true, data: {} };
 		},
-		userError: (
-			state: UserState,
+		cardError: (
+			state: CardState,
 			{ type, payload }: { type: string; payload: object },
-		): UserState => {
+		): CardState => {
 			return { ...state, loadingGet: false, error: payload };
 		},
 	},
 });
 
 export const {
-	getUser: getUserAction,
-	loadingGetUser: loadingGetUserAction,
-	userError: userErrorAction,
-} = userSlice.actions;
-export const userReducer = userSlice.reducer;
+	getCards: getCardsAction,
+	loadingGetCards: loadingGetCardsAction,
+	cardError: cardErrorAction,
+} = cardSlice.actions;
+export const cardReducer = cardSlice.reducer;

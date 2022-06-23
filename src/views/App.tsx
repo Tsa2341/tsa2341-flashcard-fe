@@ -6,7 +6,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import '../styles/App.css';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloClientOptions, ApolloProvider, InMemoryCache } from '@apollo/client';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
@@ -29,12 +29,24 @@ const theme = createTheme({
 	},
 });
 
-const client = new ApolloClient({
-	uri: 'https://tsa2341-flashcard-be.herokuapp.com/',
+let clientObject: object = {
+	uri: process.env.REACT_APP_BACKEND_URL,
 	cache: new InMemoryCache(),
-});
+};
+
+if (localStorage.getItem('token')) {
+	console.log(localStorage.getItem('token'));
+	clientObject = Object.assign(clientObject, {
+		headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+	});
+
+	console.log(clientObject);
+}
+
+const client = new ApolloClient(clientObject as ApolloClientOptions<typeof clientObject>);
 
 function App() {
+	console.log(process.env.REACT_APP_BACKEND_URL, 'backend url');
 	return (
 		<ThemeProvider theme={theme}>
 			<ApolloProvider client={client}>

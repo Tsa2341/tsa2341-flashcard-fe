@@ -31,7 +31,7 @@ const SIGN_IN = gql`
 
 export default function SignIn() {
 	const dispatch: Dispatch = useDispatch();
-	const [signIn, { data, loading, error }] = useMutation(SIGN_IN);
+	const [signIn, { loading, data }] = useMutation(SIGN_IN);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,10 +48,11 @@ export default function SignIn() {
 				password: signInData.get('password'),
 			},
 		})
-			.then(() => {
-				console.log(data, 'data');
+			.then((value) => {
+				console.log(value.data.login, 'value');
 
-				dispatch(getUserAction(data));
+				localStorage.setItem('token', value.data.login.token);
+				dispatch(getUserAction(value.data.login));
 				navigate('/flashcard');
 			})
 			.catch((error) => {
