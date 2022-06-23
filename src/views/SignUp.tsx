@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';

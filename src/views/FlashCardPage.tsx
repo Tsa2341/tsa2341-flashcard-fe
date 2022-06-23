@@ -1,13 +1,14 @@
-import { gql, QueryHookOptions, useLazyQuery } from '@apollo/client';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { gql, useLazyQuery } from '@apollo/client';
 import { Button, Grid, MenuItem, Select, TextField } from '@mui/material';
 import { Container } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
 import NavBar from '../components/NavBar';
-import { getCardsAction, loadingGetCardsAction } from '../redux/reducers/card.reducer';
+import { getCardsAction } from '../redux/reducers/card.reducer';
 
 const FIND_CARD = gql`
 	query Query($findCardEmail2: String, $filter: String, $orderBy: [cardOrderByInput!]) {

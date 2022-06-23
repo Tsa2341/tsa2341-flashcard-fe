@@ -43,6 +43,8 @@ if (localStorage.getItem('token')) {
 	console.log(clientObject);
 }
 
+console.log(process.env);
+
 const client = new ApolloClient(clientObject as ApolloClientOptions<typeof clientObject>);
 
 function App() {
