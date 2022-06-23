@@ -37,5 +37,9 @@ export const userSlice = createSlice({
 	},
 });
 
-export const { getUser, loadingGetUser, userError } = userSlice.actions;
+export const {
+	getUser: getUserAction,
+	loadingGetUser: loadingGetUserAction,
+	userError: userErrorAction,
+} = userSlice.actions;
 export const userReducer = userSlice.reducer;

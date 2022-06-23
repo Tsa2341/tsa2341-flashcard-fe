@@ -1,3 +1,9 @@
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+
+import { toast } from 'react-toastify';
+import { gql, useMutation } from '@apollo/client';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -7,17 +13,56 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+
 import NavBar from '../components/NavBar';
+import { CircularProgress } from '@mui/material';
+import {
+	getUserAction,
+	loadingGetUserAction,
+	userErrorAction,
+} from '../redux/reducers/user.reducer';
+import { useNavigate } from 'react-router-dom';
+
+const SIGN_UP = gql`
+	mutation SignUp($email: String!, $password: String!, $name: String!) {
+		signup(name: $name, email: $email, password: $password) {
+			token
+			user {
+				id
+				name
+				email
+			}
+		}
+	}
+`;
 
 export default function SignUp() {
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	const dispatch: Dispatch = useDispatch();
+	const [signUp, { data, loading }] = useMutation(SIGN_UP);
+	const navigate = useNavigate();
+
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get('email'),
-			password: data.get('password'),
-		});
+		const signUpData = new FormData(event.currentTarget);
+
+		dispatch(loadingGetUserAction({}));
+		await signUp({
+			variables: {
+				email: signUpData.get('email'),
+				password: signUpData.get('password'),
+				name: `${signUpData.get('firstName')} ${signUpData.get('lastName')}`,
+			},
+		})
+			.then(() => {
+				console.log(data, 'data');
+
+				dispatch(getUserAction(data));
+				navigate('/flashcard');
+			})
+			.catch((error) => {
+				toast.error(error.message);
+				dispatch(userErrorAction(error.message));
+			});
 	};
 
 	return (
@@ -91,8 +136,13 @@ export default function SignUp() {
 								/>
 							</Grid>
 						</Grid>
-						<Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-							Sign Up
+						<Button
+							type='submit'
+							fullWidth
+							variant='contained'
+							sx={{ mt: 3, mb: 2 }}
+							disabled={loading}>
+							{loading ? <CircularProgress size='20px' /> : 'Sign Up'}
 						</Button>
 					</Box>
 				</Box>

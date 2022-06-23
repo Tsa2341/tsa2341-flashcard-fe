@@ -6,6 +6,9 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import '../styles/App.css';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
 	palette: {
@@ -26,15 +29,23 @@ const theme = createTheme({
 	},
 });
 
+const client = new ApolloClient({
+	uri: 'https://tsa2341-flashcard-be.herokuapp.com/',
+	cache: new InMemoryCache(),
+});
+
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
-			<Routes>
-				<Route path='' element={<HomePage />}></Route>
-				<Route path='sign-in' element={<SignIn />}></Route>
-				<Route path='sign-up' element={<SignUp />}></Route>
-				<Route path='flashcard' element={<FlashCardPage />}></Route>
-			</Routes>
+			<ApolloProvider client={client}>
+				<Routes>
+					<Route path='' element={<HomePage />}></Route>
+					<Route path='sign-in' element={<SignIn />}></Route>
+					<Route path='sign-up' element={<SignUp />}></Route>
+					<Route path='flashcard' element={<FlashCardPage />}></Route>
+				</Routes>
+				<ToastContainer />
+			</ApolloProvider>
 		</ThemeProvider>
 	);
 }
