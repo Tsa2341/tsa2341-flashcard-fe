@@ -1,6 +1,8 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { NavLink } from 'react-router-dom';
 import '../styles/NavBar.css';
+import { ReactElement, useState } from 'react';
 
 const LinkTypography =
 	(page: string) =>
@@ -12,8 +14,9 @@ const LinkTypography =
 		);
 	};
 
-function NavBar() {
+function NavBar({ children }: { children?: ReactElement }) {
 	const theme = useTheme();
+	const [first, setfirst] = useState('');
 
 	return (
 		<>
@@ -34,15 +37,29 @@ function NavBar() {
 					width: '100%',
 					zIndex: '1000',
 				}}>
-				<NavLink className='nav-link' to='/'>
-					{LinkTypography('Home')}
-				</NavLink>
-				<NavLink className='nav-link' to='/sign-in'>
-					{LinkTypography('SignIn')}
-				</NavLink>
-				<NavLink className='nav-link' to='/sign-up'>
-					{LinkTypography('SignUp')}
-				</NavLink>
+				{children ? children : []}
+				{localStorage.getItem('token') ? (
+					<IconButton
+						onClick={() => {
+							localStorage.removeItem('token');
+							localStorage.removeItem('userId');
+							setfirst('');
+						}}>
+						<LogoutIcon />
+					</IconButton>
+				) : (
+					<>
+						<NavLink className='nav-link' to='/'>
+							{LinkTypography('Home')}
+						</NavLink>
+						<NavLink className='nav-link' to='/sign-in'>
+							{LinkTypography('SignIn')}
+						</NavLink>
+						<NavLink className='nav-link' to='/sign-up'>
+							{LinkTypography('SignUp')}
+						</NavLink>
+					</>
+				)}
 			</Box>
 		</>
 	);

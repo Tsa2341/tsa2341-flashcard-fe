@@ -39,10 +39,6 @@ export default function SignIn() {
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const signInData = new FormData(event.currentTarget);
-		console.log({
-			email: signInData.get('email'),
-			password: signInData.get('password'),
-		});
 
 		await signIn({
 			variables: {
@@ -51,9 +47,8 @@ export default function SignIn() {
 			},
 		})
 			.then((value) => {
-				console.log(value.data.login, 'value');
-
 				localStorage.setItem('token', value.data.login.token);
+				localStorage.setItem('userId', value.data.login.user.id);
 				dispatch(getUserAction(value.data.login));
 				navigate('/flashcard');
 			})

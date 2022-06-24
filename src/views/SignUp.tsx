@@ -57,9 +57,8 @@ export default function SignUp() {
 			},
 		})
 			.then((value) => {
-				console.log(value.data.signup, 'value');
-
 				localStorage.setItem('token', value.data.signup.token);
+				localStorage.setItem('userId', value.data.signup.user.id);
 				dispatch(getUserAction(value.data.signup));
 				navigate('/flashcard');
 			})

@@ -20,7 +20,6 @@ export const userSlice = createSlice({
 			state: UserState,
 			{ type, payload }: { type: string; payload: object },
 		): UserState => {
-			console.log(payload);
 			return { ...state, loadingGet: false, error: null, data: payload };
 		},
 		loadingGetUser: (

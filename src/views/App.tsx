@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import FlashCardPage from './FlashCardPage';
 import HomePage from './HomePage';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -9,6 +8,9 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { ApolloClient, ApolloClientOptions, ApolloProvider, InMemoryCache } from '@apollo/client';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import OneFlashCard from './OneFlashCard';
+import FlashCard from './FlashCard';
+import ListFlashCard from './ListFlashCard';
 
 const theme = createTheme({
 	palette: {
@@ -35,20 +37,14 @@ let clientObject: object = {
 };
 
 if (localStorage.getItem('token')) {
-	console.log(localStorage.getItem('token'));
 	clientObject = Object.assign(clientObject, {
 		headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	});
-
-	console.log(clientObject);
 }
-
-console.log(process.env);
 
 const client = new ApolloClient(clientObject as ApolloClientOptions<typeof clientObject>);
 
 function App() {
-	console.log(process.env.REACT_APP_BACKEND_URL, 'backend url');
 	return (
 		<ThemeProvider theme={theme}>
 			<ApolloProvider client={client}>
@@ -56,7 +52,10 @@ function App() {
 					<Route path='' element={<HomePage />}></Route>
 					<Route path='sign-in' element={<SignIn />}></Route>
 					<Route path='sign-up' element={<SignUp />}></Route>
-					<Route path='flashcard' element={<FlashCardPage />}></Route>
+					<Route path='flashcard' element={<FlashCard />}>
+						<Route path='' element={<ListFlashCard />} />
+						<Route path=':id' element={<OneFlashCard />} />
+					</Route>
 				</Routes>
 				<ToastContainer />
 			</ApolloProvider>
