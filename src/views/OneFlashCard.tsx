@@ -1,32 +1,30 @@
-import React, { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import { useNavigate, useParams } from 'react-router-dom';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
+	Box,
+	Button,
 	Card,
-	CardContent,
+	CircularProgress,
 	Container,
 	IconButton,
-	Stack,
-	Box,
-	Typography,
-	Grid,
-	useTheme,
-	Button,
-	Select,
 	MenuItem,
-	CircularProgress,
+	Select,
+	Stack,
+	Typography,
+	useTheme,
 } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import NavBar from '../components/NavBar';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { gql, useMutation } from '@apollo/client';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import NavBar from '../components/NavBar';
 import {
 	cardErrorAction,
 	loadingReadCardAction,
 	readCardAction,
 } from '../redux/reducers/card.reducer';
+import { RootState } from '../redux/store';
 
 const READ_CARD = gql`
 	mutation ReadCard($id: Int!, $confidence: Int!) {
@@ -51,7 +49,7 @@ function OneFlashCard() {
 	const [flipped, setflipped] = useState(false);
 	const [selectConfidence, setselectConfidence] = useState<number>(5);
 
-	const [readCard, { data, loading, error }] = useMutation(READ_CARD);
+	const [readCard] = useMutation(READ_CARD);
 
 	const activeCard = cardsData.data?.cards.filter(
 		(card) => card.id === parseInt(params.id as string),
