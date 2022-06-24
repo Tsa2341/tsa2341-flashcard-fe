@@ -64,7 +64,7 @@ function OneFlashCard() {
 			},
 			onError(error) {
 				toast.error(error.message);
-				dispatch(cardErrorAction(error));
+				dispatch(cardErrorAction(error.message));
 			},
 			onCompleted(data) {
 				dispatch(readCardAction(data.readCard));

@@ -18,7 +18,7 @@ export interface CardType {
 }
 export interface CardState {
 	data: { cards: [CardType]; count: number } | null;
-	error: object | null;
+	error: string | null;
 	loadingGet: boolean;
 	loadingCreate: boolean;
 	loadingUpdate: boolean;
@@ -149,7 +149,7 @@ export const cardSlice = createSlice({
 		},
 		cardError: (
 			state: CardState,
-			{ type, payload }: { type: string; payload: object },
+			{ type, payload }: { type: string; payload: string },
 		): CardState => {
 			return {
 				...state,

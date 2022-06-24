@@ -1,8 +1,8 @@
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/NavBar.css';
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 
 const LinkTypography =
 	(page: string) =>
@@ -16,7 +16,7 @@ const LinkTypography =
 
 function NavBar({ children }: { children?: ReactElement }) {
 	const theme = useTheme();
-	const [first, setfirst] = useState('');
+	const navigate = useNavigate();
 
 	return (
 		<>
@@ -43,7 +43,7 @@ function NavBar({ children }: { children?: ReactElement }) {
 						onClick={() => {
 							localStorage.removeItem('token');
 							localStorage.removeItem('userId');
-							setfirst('');
+							navigate('/sign-in');
 						}}>
 						<LogoutIcon />
 					</IconButton>

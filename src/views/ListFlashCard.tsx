@@ -141,7 +141,7 @@ function ListFlashCard() {
 		setValue: updateSetValue,
 	} = useForm();
 
-	const getCards = async () => {
+	const getCards = async (props?: object) => {
 		let variables = {};
 
 		if (author) {
@@ -159,6 +159,7 @@ function ListFlashCard() {
 		dispatch(loadingGetCardsAction({}));
 		await findCards({
 			variables,
+			...props,
 			onError: (error) => {},
 		})
 			.then((value) => {
@@ -178,7 +179,7 @@ function ListFlashCard() {
 			variables: data,
 			onError: (error) => {
 				toast.error(error.message);
-				dispatch(cardErrorAction(error));
+				dispatch(cardErrorAction(error.message));
 			},
 			onCompleted: (data) => {
 				dispatch(createCardAction(data.createCard));
@@ -197,7 +198,7 @@ function ListFlashCard() {
 			},
 			onError: (error) => {
 				toast.error(error.message);
-				dispatch(cardErrorAction(error));
+				dispatch(cardErrorAction(error.message));
 			},
 			onCompleted: (data) => {
 				dispatch(updateCardAction(data.updateCard));
@@ -213,7 +214,7 @@ function ListFlashCard() {
 			variables: { id: activeCard },
 			onError(error) {
 				toast.error(error.message);
-				dispatch(cardErrorAction(error));
+				dispatch(cardErrorAction(error.message));
 			},
 			onCompleted(data) {
 				dispatch(deleteCardAction(activeCard!));
@@ -230,7 +231,9 @@ function ListFlashCard() {
 	};
 
 	useEffect(() => {
-		getCards();
+		getCards({ fetchPolicy: 'network-only' }).then(() => {
+			console.log('finished running');
+		});
 	}, []);
 
 	return (

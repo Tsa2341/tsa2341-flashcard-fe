@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface UserState {
 	data: object;
-	error: object | null;
+	error: string | null;
 	loadingGet: boolean;
 }
 
@@ -30,7 +30,7 @@ export const userSlice = createSlice({
 		},
 		userError: (
 			state: UserState,
-			{ type, payload }: { type: string; payload: object },
+			{ type, payload }: { type: string; payload: string },
 		): UserState => {
 			return { ...state, loadingGet: false, error: payload };
 		},
