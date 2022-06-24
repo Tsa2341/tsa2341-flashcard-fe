@@ -141,7 +141,7 @@ function ListFlashCard() {
 		setValue: updateSetValue,
 	} = useForm();
 
-	const getCards = async (props?: object) => {
+	const getCards = async () => {
 		let variables = {};
 
 		if (author) {
@@ -159,7 +159,7 @@ function ListFlashCard() {
 		dispatch(loadingGetCardsAction({}));
 		await findCards({
 			variables,
-			...props,
+			fetchPolicy: 'network-only',
 			onError: (error) => {},
 		})
 			.then((value) => {
@@ -231,7 +231,7 @@ function ListFlashCard() {
 	};
 
 	useEffect(() => {
-		getCards({ fetchPolicy: 'network-only' }).then(() => {
+		getCards().then(() => {
 			console.log('finished running');
 		});
 	}, []);
