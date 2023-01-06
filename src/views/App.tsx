@@ -5,7 +5,14 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import '../styles/App.css';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { ApolloClient, ApolloClientOptions, ApolloProvider, InMemoryCache } from '@apollo/client';
+import {
+	ApolloClient,
+	ApolloClientOptions,
+	ApolloProvider,
+	createHttpLink,
+	InMemoryCache,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import OneFlashCard from './OneFlashCard';
@@ -31,16 +38,25 @@ const theme = createTheme({
 	},
 });
 
-let clientObject: object = {
-	uri: process.env.REACT_APP_BACKEND_URL,
-	cache: new InMemoryCache(),
-};
+const authLink = setContext((_, { headers }) => {
+	const token = localStorage.getItem('token');
+	return {
+		headers: {
+			...headers,
+			authorization: token ? token : '',
+		},
+	};
+});
 
-if (localStorage.getItem('token')) {
-	clientObject = Object.assign(clientObject, {
-		headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-	});
-}
+const httpLink = createHttpLink({
+	uri: process.env.REACT_APP_BACKEND_URL,
+});
+
+let clientObject: object = {
+	// uri: process.env.REACT_APP_BACKEND_URL,
+	cache: new InMemoryCache(),
+	link: authLink.concat(httpLink),
+};
 
 const client = new ApolloClient(clientObject as ApolloClientOptions<typeof clientObject>);
 
